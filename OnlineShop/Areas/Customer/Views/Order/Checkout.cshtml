@@ -1,0 +1,127 @@
+﻿@model OnlineShop.Models.Order
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Order Details";
+}
+@using Microsoft.AspNetCore.Http
+@using OnlineShop.Utility
+@inject IHttpContextAccessor ContextAccessor
+@{
+    List<Products> products = ContextAccessor.HttpContext.Session.Get<List<Products>>("products");
+    if(products == null)
+    {
+       products=new List<Products>();    
+    }
+
+}
+<br />
+<h2 class="text-info">Order Product</h2>
+
+<form asp-action="Checkout" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border row">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      <div class="col-6">
+       <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Name"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group row mt-2">
+            <div class="col-4">
+                <label asp-for="PhoneNo"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="PhoneNo" class="form-control" />
+            </div>
+            <span asp-validation-for="PhoneNo" class="text-danger"></span>
+        </div>
+
+          <div class="form-group row mt-2">
+            <div class="col-4">
+                <label asp-for="Address"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Address" class="form-control" />
+            </div>
+            <span asp-validation-for="Address" class="text-danger"></span>
+          </div>
+
+        <div class="form-group row mt-2">
+            <div class="col-4">
+                <label asp-for="Email"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+          <div class="form-group row mt-2">
+            <div class="col-4">
+                <label asp-for="OrderDate"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="OrderDate" type="text" readonly="readonly" class="form-control" />
+            </div>
+            <span asp-validation-for="OrderDate" class="text-danger"></span>
+        </div>
+      </div>
+      <div class="col-6">
+          <table class="table table-bordered">
+              <thead>
+                 <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                 </tr>
+              </thead>
+              <tbody>
+                  @foreach(var item in products)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.Image" height="100px" wiwidth="150px"/>
+                            </td>
+                            <td>@item.Name</td>
+                            <td>@item.Price</td>
+                        </tr>
+                    }
+                </tbody>
+          </table>
+     </div>
+     <div class="text-end">
+         <h3>Total Price: @products.Sum(c=>c.Price)</h3>
+     </div>
+     <div class="text-end">
+         <input type="submit" value="Place Order" class="btn btn-success"/>
+     </div>
+
+</form>
+
+@section Scripts{
+    @{ 
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+       
+    }
+     <script>
+           $(document).ready(function(){
+             $(function() {
+              $("#OrderDate").datepicker(
+                  {
+                      showAnim:"slide",
+                      changeMounth:true,
+                      changeYear:true
+                  }
+              );
+            });
+           })
+     </script>
+}

@@ -1,0 +1,47 @@
+﻿@using OnlineShop.Models
+@model IEnumerable<ApplicationUser>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<br /><br />
+
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Assign user Role</h2>
+    </div>
+</div>
+<br />
+
+<table class="table table-striped border mt-2" id="myTable">
+  <thead>
+        <tr class="table-info">
+        <th>User Name</th>
+        <th>Role Name</th>
+    </tr>
+  </thead>
+   
+  <tbody>
+      @foreach (var item in ViewBag.UserRoles)
+        {
+            <tr>
+                <td>@item.UserName</td>                
+                <td>@item.RoleName</td>
+            </tr>
+        }
+
+  </tbody>
+</table>
+@section scripts{
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var save = '@TempData["save"]'
+            if(save != null){
+                alertify.success(save);
+            }
+        })
+    </script>
+}
